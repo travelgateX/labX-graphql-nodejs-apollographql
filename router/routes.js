@@ -1,7 +1,7 @@
 const { graphqlExpress } = require('apollo-server-express');
 const { expressPlayground } = require('graphql-playground-middleware');
-const { makeExecutableSchema } = require('graphql-tools');
-
+const { makeExecutableSchema, mergeSchemas } = require('graphql-tools');
+const { getIntrospectSchema } = require('../graphql/introspection');
 const express = require('express');
 const router = express.Router();
 
@@ -14,14 +14,37 @@ const schemaIntern = makeExecutableSchema({
     resolvers,
 });
 
-//create function for /graphql endpoint and merge all the schemas
-router.post('/', graphqlExpress({ schema: schemaIntern }));
+const endpoints = [
+    // 'https://dev-api.travelgatex.com'
+    'http://localhost:9002/graphql'
+];
 
-// Playground, a visual editor for queries
-router.get('/', expressPlayground({ endpointUrl: '/' }));
+(async function () {
+    try {
+        //promise.all to grab all remote schemas at the same time, we do not care what order they come back but rather just when they finish
+        allSchemas = await Promise.all(endpoints.map(ep => getIntrospectSchema(ep)));
 
-// Status query
-router.get('/status', function (req, res) { res.status(200).json('OK'); });
+        // Add intern schema
+        allSchemas.push(schemaIntern);
+
+        //create function for /graphql endpoint and merge all the schemas
+        router.post('/', graphqlExpress({
+            schema: mergeSchemas({
+                schemas: allSchemas
+            })
+        }));
+        // Playground, a visual editor for queries
+        router.get('/', expressPlayground({ endpointUrl: '/' }));
+
+        // Status query
+        router.get('/status', function (req, res) {
+            res.status(200).json('OK');
+        });
+        
+    } catch (error) {
+        console.log('ERROR: Failed to grab introspection queries', error);
+    }
+})();
     
 module.exports = {
     router
