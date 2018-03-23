@@ -11,6 +11,9 @@ interface Character {
   # The friends of the character, or an empty list if they have none
   friends: [Character]
 
+  # The friends of the character exposed as a connection with edges
+  friendsConnection(first: Int, after: ID): FriendsConnection!
+
   # The movies this character appears in
   appearsIn: [Episode!]!
 }
@@ -25,6 +28,9 @@ type Droid implements Character {
 
   # This droid's friends, or an empty list if they have none
   friends: [Character]
+
+  # The friends of the droid exposed as a connection with edges
+  friendsConnection(first: Int, after: ID): FriendsConnection!
 
   # The movies this droid appears in
   appearsIn: [Episode!]!
@@ -45,6 +51,30 @@ enum Episode {
   JEDI
 }
 
+# A connection object for a character's friends
+type FriendsConnection {
+  # The total number of friends
+  totalCount: Int!
+
+  # The edges for each of the character's friends.
+  edges: [FriendsEdge]
+
+  # A list of the friends, as a convenience when edges are not needed.
+  friends: [Character]
+
+  # Information for paginating this connection
+  pageInfo: PageInfo!
+}
+
+# An edge object for a character's friends
+type FriendsEdge {
+  # A cursor used for pagination
+  cursor: ID!
+
+  # The character represented by this friendship edge
+  node: Character
+}
+
 # A humanoid creature from the Star Wars universe
 type Human implements Character {
   # The ID of the human
@@ -61,6 +91,9 @@ type Human implements Character {
 
   # This human's friends, or an empty list if they have none
   friends: [Character]
+
+  # The friends of the human exposed as a connection with edges
+  friendsConnection(first: Int, after: ID): FriendsConnection!
 
   # The movies this human appears in
   appearsIn: [Episode!]!
@@ -81,6 +114,13 @@ enum LengthUnit {
 # The mutation type, represents all updates we can make to our data
 type Mutation {
   createReview(episode: Episode!, review: ReviewInput!): Review
+}
+
+# Information for paginating this connection
+type PageInfo {
+  startCursor: ID
+  endCursor: ID
+  hasNextPage: Boolean!
 }
 
 # The query type, represents all of the entry points into our object graph
@@ -124,6 +164,7 @@ type Starship {
   # Length of the starship, along the longest axis
   length(unit: LengthUnit = METER): Float!
 }
+
 `
 ;
 module.exports.typeDefs = typeDefs;
