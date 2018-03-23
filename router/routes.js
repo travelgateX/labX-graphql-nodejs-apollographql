@@ -1,6 +1,7 @@
 const { graphqlExpress } = require('apollo-server-express');
 const { expressPlayground } = require('graphql-playground-middleware');
 const { makeExecutableSchema, mergeSchemas } = require('graphql-tools');
+const { GraphQLObjectType } = require('graphql/type/definition');
 const { getIntrospectSchema } = require('../graphql/introspection');
 const express = require('express');
 const router = express.Router();
@@ -30,7 +31,13 @@ const endpoints = [
         //create function for /graphql endpoint and merge all the schemas
         router.post('/', graphqlExpress({
             schema: mergeSchemas({
-                schemas: allSchemas
+                schemas: allSchemas,
+                onTypeConflict: (leftType, rightType) => {
+                    if (leftType instanceof GraphQLObjectType) {
+                        return mergeObjectTypes(leftType, rightType);
+                    }
+                    return leftType;
+                }
             })
         }));
         // Playground, a visual editor for queries
@@ -40,12 +47,33 @@ const endpoints = [
         router.get('/status', function (req, res) {
             res.status(200).json('OK');
         });
-        
+
     } catch (error) {
         console.log('ERROR: Failed to grab introspection queries', error);
     }
 })();
-    
+
+function mergeObjectTypes(leftType, rightType) {
+    if (!rightType) {
+        return leftType;
+    }
+    if (leftType.constructor.name !== rightType.constructor.name) {
+        throw new TypeError(`Cannot merge with different base type. this: ${leftType.constructor.name}, other: ${rightType.constructor.name}.`);
+    }
+    leftType.getFields() // Populate _fields
+    leftType.getInterfaces() // Populate _interfaces
+    var count = 0
+    for (const [key, value] of Object.entries(rightType.getFields())) {
+        leftType._fields[key+count] = value;
+        count = count + 1;
+    }
+    for (const [key, value] of Object.entries(rightType.getInterfaces())) {
+        leftType._interfaces[key+count] = value;
+        count = count + 1;
+    }
+    return leftType;
+}
+
 module.exports = {
     router
 }
