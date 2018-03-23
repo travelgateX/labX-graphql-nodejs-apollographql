@@ -1,0 +1,22 @@
+[
+	{
+		"ID": "3000",
+		"Name": "Millennium Falcon",
+		"Length": 34.37
+	},
+	{
+		"ID": "3001",
+		"Name": "X-Wing",
+		"Length": 12.5
+	},
+	{
+		"ID": "3002",
+		"Name": "TIE Advanced x1",
+		"Length": 9.2
+	},
+	{
+		"ID": "3003",
+		"Name": "Imperial shuttle",
+		"Length": 20
+	}
+]

@@ -1,0 +1,33 @@
+[
+	{
+		"ID": "2000",
+		"Name": "C-3PO",
+		"Friends": [
+			"1000",
+			"1002",
+			"1003",
+			"2001"
+		],
+		"AppearsIn": [
+			"NEWHOPE",
+			"EMPIRE",
+			"JEDI"
+		],
+		"PrimaryFunction": "Protocol"
+	},
+	{
+		"ID": "2001",
+		"Name": "R2-D2",
+		"Friends": [
+			"1000",
+			"1002",
+			"1003"
+		],
+		"AppearsIn": [
+			"NEWHOPE",
+			"EMPIRE",
+			"JEDI"
+		],
+		"PrimaryFunction": "Astromech"
+	}
+]

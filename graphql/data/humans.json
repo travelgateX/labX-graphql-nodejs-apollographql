@@ -1,0 +1,89 @@
+[
+	{
+		"ID": "1000",
+		"Name": "Luke Skywalker",
+		"Friends": [
+			"1002",
+			"1003",
+			"2000",
+			"2001"
+		],
+		"AppearsIn": [
+			"NEWHOPE",
+			"EMPIRE",
+			"JEDI"
+		],
+		"Height": 1.72,
+		"Mass": 77,
+		"Starships": [
+			"3001",
+			"3003"
+		]
+	},
+	{
+		"ID": "1001",
+		"Name": "Darth Vader",
+		"Friends": [
+			"1004"
+		],
+		"AppearsIn": [
+			"NEWHOPE",
+			"EMPIRE",
+			"JEDI"
+		],
+		"Height": 2.02,
+		"Mass": 136,
+		"Starships": [
+			"3002"
+		]
+	},
+	{
+		"ID": "1002",
+		"Name": "Han Solo",
+		"Friends": [
+			"1000",
+			"1003",
+			"2001"
+		],
+		"AppearsIn": [
+			"NEWHOPE",
+			"EMPIRE",
+			"JEDI"
+		],
+		"Height": 1.8,
+		"Mass": 80,
+		"Starships": [
+			"3000",
+			"3003"
+		]
+	},
+	{
+		"ID": "1003",
+		"Name": "Leia Organa",
+		"Friends": [
+			"1000",
+			"1002",
+			"2000",
+			"2001"
+		],
+		"AppearsIn": [
+			"NEWHOPE",
+			"EMPIRE",
+			"JEDI"
+		],
+		"Height": 1.5,
+		"Mass": 49
+	},
+	{
+		"ID": "1004",
+		"Name": "Wilhuff Tarkin",
+		"Friends": [
+			"1001"
+		],
+		"AppearsIn": [
+			"NEWHOPE"
+		],
+		"Height": 1.8,
+		"Mass": 0
+	}
+]
